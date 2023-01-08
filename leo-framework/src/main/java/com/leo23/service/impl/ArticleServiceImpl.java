@@ -7,6 +7,7 @@ import com.leo23.constants.SystemConstants;
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.entity.Article;
 import com.leo23.domain.entity.Category;
+import com.leo23.domain.vo.ArticleDetailVo;
 import com.leo23.domain.vo.ArticleListVo;
 import com.leo23.domain.vo.HotArticleVo;
 import com.leo23.domain.vo.PageVo;
@@ -88,6 +89,20 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         PageVo pageVo = new PageVo(articleListVos, page.getTotal());
         return ResponseResult.okResult(pageVo);
+    }
+
+    @Override
+    public ResponseResult getArticleDetail(Long id) {
+        // 根据id查询文章
+        Article article = getById(id);
+        // 转化成Vo
+        ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
+        // 根据分类id查询分类名称
+        Category category = categoryService.getById(articleDetailVo.getCategoryId());
+        if (category != null) {
+            articleDetailVo.setCategoryName(category.getName());
+        }
+        return ResponseResult.okResult(articleDetailVo);
     }
 }
 
