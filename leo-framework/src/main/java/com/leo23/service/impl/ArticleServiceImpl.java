@@ -6,15 +6,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leo23.constants.SystemConstants;
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.entity.Article;
+import com.leo23.domain.entity.Category;
 import com.leo23.domain.vo.ArticleListVo;
 import com.leo23.domain.vo.HotArticleVo;
 import com.leo23.domain.vo.PageVo;
 import com.leo23.mapper.ArticleMapper;
 import com.leo23.service.ArticleService;
+import com.leo23.service.CategoryService;
 import com.leo23.utils.BeanCopyUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,6 +31,9 @@ import java.util.Objects;
  */
 @Service("articleService")
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
+    @Resource
+    @Lazy
+    private CategoryService categoryService;
 
     @Override
     public ResponseResult hotArticleList() {
@@ -61,8 +68,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 分页查询
         Page<Article> page = new Page<>(pageNum, pageSize);
         page(page, wrapper);
+
+        // 查询categoryName
+        List<Article> articles = page.getRecords();
+        for (Article article : articles) {
+            Category category = categoryService.getById(article.getCategoryId());
+            article.setCategoryName(category.getName());
+        }
+
         // 封装查询结果
         List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(page.getRecords(), ArticleListVo.class);
+
         PageVo pageVo = new PageVo(articleListVos, page.getTotal());
         return ResponseResult.okResult(pageVo);
     }

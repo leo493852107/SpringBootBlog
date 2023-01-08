@@ -47,6 +47,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
                 .collect(Collectors.toList());
         // 封装vo
         List<CategoryVo> categoryVos = BeanCopyUtils.copyBeanList(categories, CategoryVo.class);
+        // 查询categoryName
+
         return ResponseResult.okResult(categoryVos);
     }
 }
