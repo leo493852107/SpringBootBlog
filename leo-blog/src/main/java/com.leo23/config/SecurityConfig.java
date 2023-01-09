@@ -1,5 +1,6 @@
 package com.leo23.config;
 
+import com.leo23.filter.JwtAuthenticationTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -21,6 +23,9 @@ public class SecurityConfig {
 
     @Resource
     private AuthenticationConfiguration authenticationConfiguration;
+
+    @Resource
+    private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
     /**
      * 获取AuthenticationManager（认证管理器），登录时认证使用
@@ -59,9 +64,11 @@ public class SecurityConfig {
                 .authorizeRequests()
                 // 对于登录接口允许匿名访问
                 .antMatchers("/login").anonymous()
+                .antMatchers("/link/getAllLink").authenticated()
                 // 除了上面外所有的请求全部不需要认证即可访问
                 .anyRequest().permitAll()
-                .and().build();
+                .and().addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     /**
