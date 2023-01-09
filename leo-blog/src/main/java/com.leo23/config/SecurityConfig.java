@@ -70,13 +70,14 @@ public class SecurityConfig {
                 .authorizeRequests()
                 // 对于登录接口允许匿名访问
                 .antMatchers("/login").anonymous()
-                .antMatchers("/link/getAllLink").authenticated()
+                .antMatchers("/logout").authenticated()
                 // 除了上面外所有的请求全部不需要认证即可访问
                 .anyRequest().permitAll()
                 .and().exceptionHandling()//配置异常处理器
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .accessDeniedHandler(accessDeniedHandler)
                 .and().addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout().disable()
                 .build();
     }
 

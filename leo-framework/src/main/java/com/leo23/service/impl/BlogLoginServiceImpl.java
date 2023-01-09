@@ -12,6 +12,7 @@ import com.leo23.utils.RedisCache;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -45,5 +46,17 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         BlogUserLoginVo vo = new BlogUserLoginVo(jwt, userInfoVo);
 
         return ResponseResult.okResult(vo);
+    }
+
+    @Override
+    public ResponseResult logout() {
+        // 获取token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        // 获取userId
+        Long userId = loginUser.getUser().getId();
+        // 删除redis中的用户信息
+        redisCache.deleteObject("bloglogin:" + userId);
+        return ResponseResult.okResult();
     }
 }
