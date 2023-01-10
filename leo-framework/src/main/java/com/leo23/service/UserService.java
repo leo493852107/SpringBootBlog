@@ -1,6 +1,7 @@
 package com.leo23.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.leo23.domain.ResponseResult;
 import com.leo23.domain.entity.User;
 
 /**
@@ -11,5 +12,6 @@ import com.leo23.domain.entity.User;
  */
 public interface UserService extends IService<User> {
 
+    ResponseResult userInfo();
 }
 
