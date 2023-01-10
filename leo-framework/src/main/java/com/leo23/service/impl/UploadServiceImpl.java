@@ -2,10 +2,13 @@ package com.leo23.service.impl;
 
 import com.google.gson.Gson;
 import com.leo23.domain.ResponseResult;
+import com.leo23.domain.entity.User;
 import com.leo23.enums.AppHttpCodeEnum;
 import com.leo23.exception.SystemException;
 import com.leo23.service.UploadService;
+import com.leo23.service.UserService;
 import com.leo23.utils.PathUtils;
+import com.leo23.utils.SecurityUtils;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.Configuration;
@@ -18,7 +21,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
+import javax.annotation.Resource;
 import java.io.InputStream;
 
 @Service
@@ -29,6 +32,8 @@ public class UploadServiceImpl implements UploadService {
     private String secretKey;
     private String bucket;
     private String domain;
+    @Resource
+    private UserService userService;
 
     @Override
     public ResponseResult uploadImg(MultipartFile img) {
@@ -40,7 +45,12 @@ public class UploadServiceImpl implements UploadService {
         }
         // 上传文件到OSS
         String filePath = PathUtils.generateFilePath(originalFilename);
+        // 七牛云文件url
         String url = uploadOss(img, filePath);
+        // 更新个人头像
+        User user = SecurityUtils.getLoginUser().getUser();
+        user.setAvatar(url);
+        userService.updateById(user);
         return ResponseResult.okResult(url);
     }
 
