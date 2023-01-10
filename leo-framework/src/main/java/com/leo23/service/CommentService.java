@@ -12,7 +12,7 @@ import com.leo23.domain.entity.Comment;
  */
 public interface CommentService extends IService<Comment> {
 
-    ResponseResult commentService(Long articleId, Integer pageNum, Integer pageSize);
+    ResponseResult commentList(String commentType,Long articleId, Integer pageNum, Integer pageSize);
 
     ResponseResult addComment(Comment comment);
 }
