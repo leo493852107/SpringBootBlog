@@ -72,6 +72,7 @@ public class SecurityConfig {
                 .antMatchers("/login").anonymous()
                 .antMatchers("/logout").authenticated()
                 .antMatchers("/user/userInfo").authenticated()
+                .antMatchers("/upload").authenticated()
                 // 除了上面外所有的请求全部不需要认证即可访问
                 .anyRequest().permitAll()
                 .and().exceptionHandling()//配置异常处理器

@@ -21,6 +21,7 @@ mybatis-plus:
       id-type: auto
 
 myoss:
-  accessKey: test
-  secretKey: test
+  accessKey:
+  secretKey:
   bucket: tzxilan
+  domain: 
