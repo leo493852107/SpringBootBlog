@@ -6,12 +6,17 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.vo.CommentVo;
 import com.leo23.domain.vo.PageVo;
+import com.leo23.enums.AppHttpCodeEnum;
+import com.leo23.exception.SystemException;
 import com.leo23.mapper.CommentMapper;
 import com.leo23.domain.entity.Comment;
 import com.leo23.service.CommentService;
 import com.leo23.service.UserService;
 import com.leo23.utils.BeanCopyUtils;
+import com.leo23.utils.SecurityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -50,8 +55,18 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         return ResponseResult.okResult(new PageVo(commentVoList, page.getTotal()));
     }
 
+    @Override
+    public ResponseResult addComment(Comment comment) {
+        if (!StringUtils.hasText(comment.getContent())) {
+            throw new SystemException(AppHttpCodeEnum.CONTENT_NOT_NULL);
+        }
+        save(comment);
+        return ResponseResult.okResult();
+    }
+
     /**
      * 根据根评论的id查询所对应的子评论的集合
+     *
      * @param id
      * @return
      */
