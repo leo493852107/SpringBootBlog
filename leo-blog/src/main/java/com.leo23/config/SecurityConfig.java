@@ -78,6 +78,7 @@ public class SecurityConfig {
                 .accessDeniedHandler(accessDeniedHandler)
                 .and().addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout().disable()
+                .cors().and() //允许跨域
                 .build();
     }
 
