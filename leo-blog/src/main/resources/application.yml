@@ -19,3 +19,8 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       id-type: auto
+
+myoss:
+  accessKey: test
+  secretKey: test
+  bucket: tzxilan
