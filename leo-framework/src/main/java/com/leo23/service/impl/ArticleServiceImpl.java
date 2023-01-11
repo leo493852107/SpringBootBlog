@@ -3,6 +3,7 @@ package com.leo23.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.leo23.constants.ArticleConstants;
 import com.leo23.constants.SystemConstants;
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.entity.Article;
@@ -15,6 +16,7 @@ import com.leo23.mapper.ArticleMapper;
 import com.leo23.service.ArticleService;
 import com.leo23.service.CategoryService;
 import com.leo23.utils.BeanCopyUtils;
+import com.leo23.utils.RedisCache;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Resource
     @Lazy
     private CategoryService categoryService;
+    @Resource
+    private RedisCache redisCache;
 
     @Override
     public ResponseResult hotArticleList() {
@@ -103,6 +107,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             articleDetailVo.setCategoryName(category.getName());
         }
         return ResponseResult.okResult(articleDetailVo);
+    }
+
+    @Override
+    public ResponseResult updateViewCount(Long id) {
+        redisCache.incrementCacheMapValue(ArticleConstants.ARTICLE_VIEW_COUNT, id.toString(), 1);
+        return ResponseResult.okResult();
     }
 }
 

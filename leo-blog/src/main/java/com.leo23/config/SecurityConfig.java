@@ -17,8 +17,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 
 @Configuration
 public class SecurityConfig {
@@ -90,9 +92,20 @@ public class SecurityConfig {
      * @return
      */
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsFilter corsFilter() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        //1,允许任何来源
+        corsConfiguration.setAllowedOriginPatterns(Collections.singletonList("*"));
+        //2,允许任何请求头
+        corsConfiguration.addAllowedHeader(CorsConfiguration.ALL);
+        //3,允许任何方法
+        corsConfiguration.addAllowedMethod(CorsConfiguration.ALL);
+        //4,允许凭证
+        corsConfiguration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-        return source;
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return new CorsFilter(source);
+
     }
 }

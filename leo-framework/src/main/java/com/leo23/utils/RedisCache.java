@@ -184,8 +184,9 @@ public class RedisCache {
         return opsForHash.get(key, hKey);
     }
 
-
+    // hKey的值+1
     public void incrementCacheMapValue(String key, String hKey, int v) {
+        System.out.println();
         redisTemplate.opsForHash().increment(key, hKey, v);
     }
 
