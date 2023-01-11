@@ -19,7 +19,12 @@ public class UserController {
     }
 
     @PutMapping("/userInfo")
-    public ResponseResult updateUserInfo(@RequestBody User user){
+    public ResponseResult updateUserInfo(@RequestBody User user) {
         return userService.updateUserInfo(user);
+    }
+
+    @PostMapping("/register")
+    public ResponseResult register(@RequestBody User user) {
+        return userService.register(user);
     }
 }
