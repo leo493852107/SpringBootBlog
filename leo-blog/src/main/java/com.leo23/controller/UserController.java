@@ -1,5 +1,6 @@
 package com.leo23.controller;
 
+import com.leo23.annotation.SystemLog;
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.entity.User;
 import com.leo23.service.UserService;
@@ -14,6 +15,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/userInfo")
+    @SystemLog(businessName = "获取用户信息")
     public ResponseResult userInfo() {
         return userService.userInfo();
     }
