@@ -2,8 +2,10 @@ package com.leo23.controller;
 
 import com.leo23.constants.SystemConstants;
 import com.leo23.domain.ResponseResult;
+import com.leo23.domain.dto.AddCommentDto;
 import com.leo23.domain.entity.Comment;
 import com.leo23.service.CommentService;
+import com.leo23.utils.BeanCopyUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,7 +27,8 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseResult addComment(@RequestBody Comment comment) {
+    public ResponseResult addComment(@RequestBody AddCommentDto addCommentDto) {
+        Comment comment = BeanCopyUtils.copyBean(addCommentDto, Comment.class);
         return commentService.addComment(comment);
     }
 
