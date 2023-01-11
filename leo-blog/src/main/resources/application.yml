@@ -21,7 +21,7 @@ mybatis-plus:
       id-type: auto
 
 myoss:
-  accessKey:
-  secretKey:
+  accessKey: bbRnC8UMZUHYXo65i53nQMkQGj70kwEhNhO1ny7U
+  secretKey: j9eYHyiFyugWRTXCI1SMzv0dXYSgzs-DkWQJLYwJ
   bucket: tzxilan
-  domain: 
+  domain: http://ro9ncdns1.bkt.clouddn.com
