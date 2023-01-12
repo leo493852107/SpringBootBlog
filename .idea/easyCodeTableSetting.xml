@@ -625,9 +625,9 @@
               </option>
               <option name="name" value="SysUser" />
               <option name="preName" value="sys_" />
-              <option name="saveModelName" value="leo-framework" />
+              <option name="saveModelName" value="leo-admin" />
               <option name="savePackageName" value="com.leo23" />
-              <option name="savePath" value="./leo-framework/src/main/java/com/leo23" />
+              <option name="savePath" value="./leo-admin/src/main/java/com/leo23" />
               <option name="templateGroupName" value="MybatisPlus" />
             </TableInfoDTO>
           </value>

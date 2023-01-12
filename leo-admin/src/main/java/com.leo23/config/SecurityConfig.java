@@ -69,12 +69,12 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 // 对于登录接口允许匿名访问
-//                .antMatchers("/login").anonymous()
+                .antMatchers("/user/login").anonymous()
 //                .antMatchers("/logout").authenticated()
 //                .antMatchers("/user/userInfo").authenticated()
 //                .antMatchers("/upload").authenticated()
                 // 除了上面外所有的请求全部不需要认证即可访问
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and().exceptionHandling()//配置异常处理器
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .accessDeniedHandler(accessDeniedHandler)
