@@ -29,7 +29,8 @@
         FROM sys_menu m
         WHERE m.menu_type IN ('C', 'M')
           AND m.STATUS = 0
-          AND m.del_flag = 0;
+          AND m.del_flag = 0
+        ORDER BY m.parent_id, m.order_num;
     </select>
 
     <select id="selectRouterMenuTreeByUserId" resultType="com.leo23.domain.entity.Menu">
@@ -52,6 +53,7 @@
         WHERE ur.user_id = #{userId}
           AND m.menu_type IN ('C', 'M')
           AND m.STATUS = 0
-          AND m.del_flag = 0;
+          AND m.del_flag = 0
+        ORDER BY m.parent_id, m.order_num;
     </select>
 </mapper>

@@ -8,6 +8,7 @@ import com.leo23.mapper.UserMapper;
 import com.leo23.service.AdminLoginService;
 import com.leo23.utils.JwtUtil;
 import com.leo23.utils.RedisCache;
+import com.leo23.utils.SecurityUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -50,6 +51,14 @@ public class AdminLoginServiceImpl extends ServiceImpl<UserMapper, User> impleme
         Map<String, String> map = new HashMap<>();
         map.put("token", jwt);
         return ResponseResult.okResult(map);
+    }
+
+    @Override
+    public ResponseResult logout() {
+        // 获取用户id，redis删除对应的值
+        Long userId = SecurityUtils.getUserId();
+        redisCache.deleteObject("login:" + userId);
+        return ResponseResult.okResult();
     }
 }
 

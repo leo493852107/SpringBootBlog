@@ -11,6 +11,7 @@ import com.leo23.service.AdminLoginService;
 import com.leo23.service.MenuService;
 import com.leo23.service.RoleService;
 import com.leo23.utils.BeanCopyUtils;
+import com.leo23.utils.RedisCache;
 import com.leo23.utils.SecurityUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,5 +57,10 @@ public class AdminLoginController {
         List<Menu> menus = menuService.selectRouterMenuTreeByUserId(userId);
         // 封装数据返回
         return ResponseResult.okResult(new RoutersVo(menus));
+    }
+
+    @PostMapping("/user/logout")
+    public ResponseResult logout() {
+        return adminLoginService.logout();
     }
 }

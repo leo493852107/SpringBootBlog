@@ -12,5 +12,7 @@ import com.leo23.domain.entity.User;
  */
 public interface AdminLoginService extends IService<User> {
     ResponseResult login(User user);
+
+    ResponseResult logout();
 }
 

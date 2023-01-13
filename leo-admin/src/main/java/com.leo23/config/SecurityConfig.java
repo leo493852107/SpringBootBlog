@@ -79,7 +79,7 @@ public class SecurityConfig {
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .accessDeniedHandler(accessDeniedHandler)
                 .and().addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout().disable()
+                .logout().disable() // 关闭默认的注销功能
                 .cors().and() //允许跨域
                 .build();
     }
