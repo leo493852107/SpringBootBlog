@@ -24,4 +24,9 @@ public class TagController {
     public ResponseResult add(@RequestBody Tag tag) {
         return tagService.add(tag);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseResult deleteTagById(@PathVariable(value = "id") Integer id) {
+        return tagService.deleteTagById(id);
+    }
 }

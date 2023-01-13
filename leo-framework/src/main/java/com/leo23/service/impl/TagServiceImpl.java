@@ -41,5 +41,11 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         baseMapper.insert(tag);
         return ResponseResult.okResult();
     }
+
+    @Override
+    public ResponseResult deleteTagById(Integer id) {
+        baseMapper.deleteById(id);
+        return ResponseResult.okResult();
+    }
 }
 
