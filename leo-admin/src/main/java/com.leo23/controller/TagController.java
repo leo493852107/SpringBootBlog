@@ -29,4 +29,14 @@ public class TagController {
     public ResponseResult deleteTagById(@PathVariable(value = "id") Integer id) {
         return tagService.deleteTagById(id);
     }
+
+    @GetMapping("/{id}")
+    public ResponseResult getTagById(@PathVariable(value = "id") Integer id) {
+        return tagService.getTagById(id);
+    }
+
+    @PutMapping
+    public ResponseResult updateTagById(@RequestBody Tag tag) {
+        return tagService.updateTagById(tag);
+    }
 }

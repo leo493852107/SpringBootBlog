@@ -6,11 +6,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.dto.TagListDto;
 import com.leo23.domain.vo.PageVo;
+import com.leo23.domain.vo.TagVo;
 import com.leo23.mapper.TagMapper;
 import com.leo23.domain.entity.Tag;
 import com.leo23.service.TagService;
+import com.leo23.utils.BeanCopyUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -45,6 +48,18 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Override
     public ResponseResult deleteTagById(Integer id) {
         baseMapper.deleteById(id);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult getTagById(Integer id) {
+        Tag tag = baseMapper.selectById(id);
+        return ResponseResult.okResult(BeanCopyUtils.copyBean(tag, TagVo.class));
+    }
+
+    @Override
+    public ResponseResult updateTagById(Tag tag) {
+        baseMapper.updateById(tag);
         return ResponseResult.okResult();
     }
 }
