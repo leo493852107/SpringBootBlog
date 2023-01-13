@@ -6,6 +6,7 @@ import com.leo23.constants.SystemConstants;
 import com.leo23.mapper.MenuMapper;
 import com.leo23.domain.entity.Menu;
 import com.leo23.service.MenuService;
+import com.leo23.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Override
     public List<String> selectPermsByUserId(Long id) {
         // 如果是管理员，返回所有权限(Permission中需要的所有菜单类型为C或者F的，状态为正常的，未被删除的权限)
-        if (id == 1L) {
+        if (SecurityUtils.isAdmin()) {
             LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<>();
             wrapper.in(Menu::getMenuType, SystemConstants.MENU_TYPE_MENU, SystemConstants.MENU_TYPE_BUTTON);
             wrapper.eq(Menu::getStatus, SystemConstants.STATUS_NORMAL);
@@ -34,5 +35,43 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         // 筛选用户所具有的权限
         return baseMapper.selectPermsByUserId(id);
     }
+
+    @Override
+    public List<Menu> selectRouterMenuTreeByUserId(Long userId) {
+        List<Menu> menus = null;
+        // 判断是否是管理员，是 返回所有符合要求的menu
+        if (SecurityUtils.isAdmin()) {
+            menus = baseMapper.selectAllRouterMenu();
+        } else {
+            // 当前用户具有的Menu
+            menus = baseMapper.selectRouterMenuTreeByUserId(userId);
+        }
+        // 构建tree
+        List<Menu> menuTree = buildMenuTree(menus, 0L);
+        return menuTree;
+    }
+
+    private List<Menu> buildMenuTree(List<Menu> menus, Long parentId) {
+        List<Menu> menuTree = menus.stream().filter(menu -> menu.getParentId().equals(parentId))
+                .map(menu -> menu.setChildren(getChildren(menu, menus)))
+                .collect(Collectors.toList());
+        return menuTree;
+    }
+
+    /**
+     * 获取传入参数的 子Menu集合
+     *
+     * @param menu
+     * @param menus
+     * @return
+     */
+    private List<Menu> getChildren(Menu menu, List<Menu> menus) {
+        List<Menu> childrenList = menus.stream()
+                .filter(m -> m.getParentId().equals(menu.getId()))
+                .map(m -> m.setChildren(getChildren(m, menus))) // 递归调用
+                .collect(Collectors.toList());
+        return childrenList;
+    }
+
 }
 

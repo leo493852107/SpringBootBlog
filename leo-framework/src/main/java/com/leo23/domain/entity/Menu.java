@@ -3,11 +3,15 @@ package com.leo23.domain.entity;
 import java.util.Date;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * 菜单权限表(Menu)表实体类
@@ -20,6 +24,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("sys_menu")
+@Accessors(chain = true)
 public class Menu {
     //菜单ID
     @TableId
@@ -59,6 +64,8 @@ public class Menu {
 
     private String delFlag;
 
+    @TableField(exist = false)
+    private List<Menu> children;
 
 }
 

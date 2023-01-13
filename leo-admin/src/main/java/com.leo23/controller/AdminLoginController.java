@@ -2,8 +2,10 @@ package com.leo23.controller;
 
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.entity.LoginUser;
+import com.leo23.domain.entity.Menu;
 import com.leo23.domain.entity.User;
 import com.leo23.domain.vo.AdminUserInfoVo;
+import com.leo23.domain.vo.RoutersVo;
 import com.leo23.domain.vo.UserInfoVo;
 import com.leo23.service.AdminLoginService;
 import com.leo23.service.MenuService;
@@ -45,5 +47,14 @@ public class AdminLoginController {
         //封装数据返回
         AdminUserInfoVo adminUserInfoVo = new AdminUserInfoVo(perms, roleKeys, userInfoVo);
         return ResponseResult.okResult(adminUserInfoVo);
+    }
+
+    @GetMapping("/getRouters")
+    public ResponseResult<RoutersVo> getRouters() {
+        Long userId = SecurityUtils.getUserId();
+        // 查询menu 结果是tree的形式
+        List<Menu> menus = menuService.selectRouterMenuTreeByUserId(userId);
+        // 封装数据返回
+        return ResponseResult.okResult(new RoutersVo(menus));
     }
 }
