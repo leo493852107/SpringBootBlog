@@ -35,5 +35,11 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         PageVo pageVo = new PageVo(page.getRecords(), page.getTotal());
         return ResponseResult.okResult(pageVo);
     }
+
+    @Override
+    public ResponseResult add(Tag tag) {
+        baseMapper.insert(tag);
+        return ResponseResult.okResult();
+    }
 }
 
