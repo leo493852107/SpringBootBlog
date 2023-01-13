@@ -16,4 +16,9 @@ public class SystemConstants {
     public static final String ARTICLE_COMMENT = "0";
     // 评论类型为：友链评论
     public static final String LINK_COMMENT = "1";
+
+    // 菜单类型（M目录 C菜单 F按钮）
+    public static final String MENU_TYPE_DIRECTORY = "M";
+    public static final String MENU_TYPE_MENU = "C";
+    public static final String MENU_TYPE_BUTTON = "F";
 }
