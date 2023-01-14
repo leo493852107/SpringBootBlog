@@ -24,4 +24,14 @@ public class ArticleController {
     public ResponseResult<PageVo> pageList(Integer pageNum, Integer pageSize, ArticleListDto articleListDto) {
         return articleService.pageList(pageNum, pageSize, articleListDto);
     }
+
+    @GetMapping("/{id}")
+    public ResponseResult getArticleById(@PathVariable(value = "id") Long id) {
+        return articleService.getArticleById(id);
+    }
+
+    @PutMapping
+    public ResponseResult updateArticle(@RequestBody AddArticleDto addArticleDto) {
+        return articleService.updateArticle(addArticleDto);
+    }
 }

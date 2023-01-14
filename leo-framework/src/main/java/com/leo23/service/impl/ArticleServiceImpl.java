@@ -151,5 +151,29 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         PageVo pageVo = new PageVo(page.getRecords(), page.getTotal());
         return ResponseResult.okResult(pageVo);
     }
+
+    @Override
+    public ResponseResult getArticleById(Long id) {
+        Article article = baseMapper.selectById(id);
+        AddArticleDto addArticleDto = BeanCopyUtils.copyBean(article, AddArticleDto.class);
+        // 查询article_tag表中包含article.id字段
+        LambdaQueryWrapper<ArticleTag> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ArticleTag::getArticleId, id);
+        List<ArticleTag> articleTagList = articleTagService.list(wrapper);
+        List<Long> tagList = articleTagList.stream().map(articleTag -> articleTag.getTagId())
+                .collect(Collectors.toList());
+        addArticleDto.setTags(tagList);
+        return ResponseResult.okResult(addArticleDto);
+    }
+
+    @Override
+    public ResponseResult updateArticle(AddArticleDto addArticleDto) {
+        Article article = BeanCopyUtils.copyBean(addArticleDto, Article.class);
+        baseMapper.updateById(article);
+        // 更新article_tag
+        List<Long> tags = addArticleDto.getTags();
+        articleTagService.updateArticleTag(addArticleDto.getId(), tags);
+        return ResponseResult.okResult();
+    }
 }
 

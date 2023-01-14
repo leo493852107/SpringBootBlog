@@ -27,5 +27,11 @@ public interface ArticleService extends IService<Article> {
 
     // 根据title，summary分页查询列表
     ResponseResult<PageVo> pageList(Integer pageNum, Integer pageSize, ArticleListDto articleListDto);
+
+    // 获取文章详情页
+    ResponseResult getArticleById(Long id);
+
+    // 根据文章id更新文章，注意tags字段
+    ResponseResult updateArticle(AddArticleDto addArticleDto);
 }
 
