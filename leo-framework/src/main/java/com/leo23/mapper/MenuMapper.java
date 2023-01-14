@@ -13,6 +13,7 @@ import java.util.List;
  */
 public interface MenuMapper extends BaseMapper<Menu> {
 
+    // 获取用户权限C,F;  菜单类型（M目录 C菜单 F按钮）
     List<String> selectPermsByUserId(Long userId);
 
     List<Menu> selectAllRouterMenu();
