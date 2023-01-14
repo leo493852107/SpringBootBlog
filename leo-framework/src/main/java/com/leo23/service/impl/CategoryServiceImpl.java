@@ -1,11 +1,13 @@
 package com.leo23.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leo23.constants.SystemConstants;
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.entity.Article;
 import com.leo23.domain.vo.CategoryVo;
+import com.leo23.domain.vo.PageVo;
 import com.leo23.mapper.CategoryMapper;
 import com.leo23.domain.entity.Category;
 import com.leo23.service.ArticleService;
@@ -59,6 +61,16 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         List<Category> list = list(wrapper);
         List<CategoryVo> categoryVos = BeanCopyUtils.copyBeanList(list, CategoryVo.class);
         return categoryVos;
+    }
+
+    @Override
+    public ResponseResult categoryList(Integer pageNum, Integer pageSize) {
+        LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Category::getStatus, SystemConstants.NORMAL);
+        Page<Category> page = new Page<>(pageNum, pageSize);
+        page(page, wrapper);
+        PageVo pageVo = new PageVo(page.getRecords(), page.getTotal());
+        return ResponseResult.okResult(pageVo);
     }
 }
 

@@ -24,6 +24,7 @@ public class WebUtils {
         }
     }
 
+    // 设置下载excel文件头
     public static void setDownLoadHeader(String filename, HttpServletResponse response) throws UnsupportedEncodingException {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
