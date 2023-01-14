@@ -83,5 +83,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         wrapper.orderByAsc(Menu::getParentId).orderByAsc(Menu::getOrderNum);
         return ResponseResult.okResult(list(wrapper));
     }
+
+    @Override
+    public ResponseResult getMenuById(Long id) {
+        return ResponseResult.okResult(baseMapper.selectById(id));
+    }
+
 }
 

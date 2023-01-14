@@ -60,6 +60,8 @@ public class Menu {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateBy;
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
+
     //备注
     private String remark;
 

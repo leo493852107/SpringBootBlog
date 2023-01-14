@@ -20,5 +20,7 @@ public interface MenuService extends IService<Menu> {
 
     // 展示菜单列表，不需要分页，可以针对菜单名称模糊查询，也可以根据菜单状态查询，按照父菜单id和orderNum排序
     ResponseResult getMenus(Menu menu);
+
+    ResponseResult getMenuById(Long id);
 }
 
