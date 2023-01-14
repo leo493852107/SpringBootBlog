@@ -3,11 +3,13 @@ package com.leo23.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leo23.constants.SystemConstants;
+import com.leo23.domain.ResponseResult;
 import com.leo23.mapper.MenuMapper;
 import com.leo23.domain.entity.Menu;
 import com.leo23.service.MenuService;
 import com.leo23.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,5 +75,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         return childrenList;
     }
 
+    @Override
+    public ResponseResult getMenus(Menu menu) {
+        LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(StringUtils.hasText(menu.getMenuName()), Menu::getMenuName, menu.getMenuName());
+        wrapper.eq(StringUtils.hasText(menu.getStatus()), Menu::getStatus, menu.getStatus());
+        wrapper.orderByAsc(Menu::getParentId).orderByAsc(Menu::getOrderNum);
+        return ResponseResult.okResult(list(wrapper));
+    }
 }
 
