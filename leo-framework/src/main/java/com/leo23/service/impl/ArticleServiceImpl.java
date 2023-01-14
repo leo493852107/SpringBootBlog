@@ -7,6 +7,7 @@ import com.leo23.constants.ArticleConstants;
 import com.leo23.constants.SystemConstants;
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.dto.AddArticleDto;
+import com.leo23.domain.dto.ArticleListDto;
 import com.leo23.domain.entity.Article;
 import com.leo23.domain.entity.ArticleTag;
 import com.leo23.domain.entity.Category;
@@ -24,6 +25,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -137,6 +139,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 .collect(Collectors.toList());
         articleTagService.saveBatch(articleTags);
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult<PageVo> pageList(Integer pageNum, Integer pageSize, ArticleListDto articleListDto) {
+        LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(StringUtils.hasText(articleListDto.getTitle()), Article::getTitle, articleListDto.getTitle());
+        wrapper.like(StringUtils.hasText(articleListDto.getSummary()), Article::getSummary, articleListDto.getSummary());
+        Page<Article> page = new Page<>(pageNum, pageSize);
+        page(page, wrapper);
+        PageVo pageVo = new PageVo(page.getRecords(), page.getTotal());
+        return ResponseResult.okResult(pageVo);
     }
 }
 

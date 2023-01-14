@@ -2,11 +2,10 @@ package com.leo23.controller;
 
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.dto.AddArticleDto;
+import com.leo23.domain.dto.ArticleListDto;
+import com.leo23.domain.vo.PageVo;
 import com.leo23.service.ArticleService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -19,5 +18,10 @@ public class ArticleController {
     @PostMapping
     public ResponseResult add(@RequestBody AddArticleDto articleDto) {
         return articleService.add(articleDto);
+    }
+
+    @GetMapping("/list")
+    public ResponseResult<PageVo> pageList(Integer pageNum, Integer pageSize, ArticleListDto articleListDto) {
+        return articleService.pageList(pageNum, pageSize, articleListDto);
     }
 }

@@ -3,7 +3,9 @@ package com.leo23.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.dto.AddArticleDto;
+import com.leo23.domain.dto.ArticleListDto;
 import com.leo23.domain.entity.Article;
+import com.leo23.domain.vo.PageVo;
 
 /**
  * 文章表(Article)表服务接口
@@ -22,5 +24,8 @@ public interface ArticleService extends IService<Article> {
     ResponseResult updateViewCount(Long id);
 
     ResponseResult add(AddArticleDto articleDto);
+
+    // 根据title，summary分页查询列表
+    ResponseResult<PageVo> pageList(Integer pageNum, Integer pageSize, ArticleListDto articleListDto);
 }
 
