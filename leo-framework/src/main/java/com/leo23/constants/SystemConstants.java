@@ -21,4 +21,7 @@ public class SystemConstants {
     public static final String MENU_TYPE_DIRECTORY = "M";
     public static final String MENU_TYPE_MENU = "C";
     public static final String MENU_TYPE_BUTTON = "F";
+
+    // 正常状态
+    public static final String NORMAL = "0";
 }

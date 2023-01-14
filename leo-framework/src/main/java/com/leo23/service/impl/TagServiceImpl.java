@@ -62,5 +62,14 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         baseMapper.updateById(tag);
         return ResponseResult.okResult();
     }
+
+    @Override
+    public List<TagVo> listAllTag() {
+        LambdaQueryWrapper<Tag> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(Tag::getId, Tag::getName);
+        List<Tag> list = list(wrapper);
+        List<TagVo> tagVos = BeanCopyUtils.copyBeanList(list, TagVo.class);
+        return tagVos;
+    }
 }
 

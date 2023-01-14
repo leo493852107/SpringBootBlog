@@ -4,10 +4,12 @@ import com.leo23.domain.ResponseResult;
 import com.leo23.domain.dto.TagListDto;
 import com.leo23.domain.entity.Tag;
 import com.leo23.domain.vo.PageVo;
+import com.leo23.domain.vo.TagVo;
 import com.leo23.service.TagService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/content/tag")
@@ -19,6 +21,13 @@ public class TagController {
     public ResponseResult<PageVo> list(Integer pageNum, Integer pageSize, TagListDto tagListDto) {
         return tagService.pageTagList(pageNum, pageSize, tagListDto);
     }
+
+    @GetMapping("/listAllTag")
+    public ResponseResult listAllTag() {
+        List<TagVo> list = tagService.listAllTag();
+        return ResponseResult.okResult(list);
+    }
+
 
     @PostMapping
     public ResponseResult add(@RequestBody Tag tag) {

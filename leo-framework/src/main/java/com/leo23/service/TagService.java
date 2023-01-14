@@ -5,6 +5,9 @@ import com.leo23.domain.ResponseResult;
 import com.leo23.domain.dto.TagListDto;
 import com.leo23.domain.entity.Tag;
 import com.leo23.domain.vo.PageVo;
+import com.leo23.domain.vo.TagVo;
+
+import java.util.List;
 
 /**
  * 标签(Tag)表服务接口
@@ -23,5 +26,7 @@ public interface TagService extends IService<Tag> {
     ResponseResult getTagById(Integer id);
 
     ResponseResult updateTagById(Tag tag);
+
+    List<TagVo> listAllTag();
 }
 

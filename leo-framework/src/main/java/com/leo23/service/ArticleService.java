@@ -2,6 +2,7 @@ package com.leo23.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.leo23.domain.ResponseResult;
+import com.leo23.domain.dto.AddArticleDto;
 import com.leo23.domain.entity.Article;
 
 /**
@@ -19,5 +20,7 @@ public interface ArticleService extends IService<Article> {
     ResponseResult getArticleDetail(Long id);
 
     ResponseResult updateViewCount(Long id);
+
+    ResponseResult add(AddArticleDto articleDto);
 }
 
