@@ -26,13 +26,18 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
     @Override
     public void updateArticleTag(Long articleId, List<Long> tagIds) {
         // 先删除所有article对应的tag
-        LambdaQueryWrapper<ArticleTag> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(ArticleTag::getArticleId, articleId);
-        remove(wrapper);
+        deleteTagsByArticleId(articleId);
         // 增加article的tag
         for (Long tagId : tagIds) {
             baseMapper.insert(new ArticleTag(articleId, tagId));
         }
+    }
+
+    @Override
+    public void deleteTagsByArticleId(Long articleId) {
+        LambdaQueryWrapper<ArticleTag> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ArticleTag::getArticleId, articleId);
+        remove(wrapper);
     }
 }
 

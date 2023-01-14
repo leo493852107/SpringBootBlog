@@ -33,5 +33,7 @@ public interface ArticleService extends IService<Article> {
 
     // 根据文章id更新文章，注意tags字段
     ResponseResult updateArticle(AddArticleDto addArticleDto);
+
+    ResponseResult deleteArticleById(Long id);
 }
 

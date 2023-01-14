@@ -16,5 +16,8 @@ public interface ArticleTagService extends IService<ArticleTag> {
 
     // 更新文章的tags, 先删后增
     void updateArticleTag(Long articleId, List<Long> tagIds);
+
+    // 根据文章id删除所有tag
+    void deleteTagsByArticleId(Long articleId);
 }
 

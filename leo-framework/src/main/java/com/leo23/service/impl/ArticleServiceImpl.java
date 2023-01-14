@@ -21,17 +21,14 @@ import com.leo23.service.ArticleTagService;
 import com.leo23.service.CategoryService;
 import com.leo23.utils.BeanCopyUtils;
 import com.leo23.utils.RedisCache;
-import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -173,6 +170,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 更新article_tag
         List<Long> tags = addArticleDto.getTags();
         articleTagService.updateArticleTag(addArticleDto.getId(), tags);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult deleteArticleById(Long id) {
+        baseMapper.deleteById(id);
+        articleTagService.deleteTagsByArticleId(id);
         return ResponseResult.okResult();
     }
 }
