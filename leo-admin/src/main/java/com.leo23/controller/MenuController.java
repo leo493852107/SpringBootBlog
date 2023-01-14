@@ -39,4 +39,10 @@ public class MenuController {
     public ResponseResult updateMenu(@RequestBody Menu menu) {
         return ResponseResult.okResult(menuService.updateById(menu));
     }
+
+    @DeleteMapping("{id}")
+    public ResponseResult deleteMenuById(@PathVariable("id") Long id) {
+        return menuService.deleteMenuById(id);
+    }
+
 }

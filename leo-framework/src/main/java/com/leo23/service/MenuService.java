@@ -22,5 +22,8 @@ public interface MenuService extends IService<Menu> {
     ResponseResult getMenus(Menu menu);
 
     ResponseResult getMenuById(Long id);
+
+    // 有子菜单不允许删除
+    ResponseResult deleteMenuById(Long id);
 }
 

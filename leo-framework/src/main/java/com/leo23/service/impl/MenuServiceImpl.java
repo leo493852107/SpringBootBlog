@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leo23.constants.SystemConstants;
 import com.leo23.domain.ResponseResult;
+import com.leo23.enums.AppHttpCodeEnum;
 import com.leo23.mapper.MenuMapper;
 import com.leo23.domain.entity.Menu;
 import com.leo23.service.MenuService;
@@ -89,5 +90,16 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         return ResponseResult.okResult(baseMapper.selectById(id));
     }
 
+    @Override
+    public ResponseResult deleteMenuById(Long id) {
+        // 查询是否具有子菜单，有子菜单告诉用户先删除子菜单
+        LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Menu::getParentId, id);
+        if (baseMapper.selectCount(wrapper) > 0) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.HAS_CHILD_MENU_ERROR);
+        }
+        baseMapper.deleteById(id);
+        return ResponseResult.okResult();
+    }
 }
 

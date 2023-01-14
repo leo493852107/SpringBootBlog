@@ -18,6 +18,7 @@ public enum AppHttpCodeEnum {
     EMAIL_NOT_NULL(511, "邮箱不能为空"),
     NICKNAME_EXIST(512, "昵称已存在"),
     UPLOAD_FILE_ERROR(513, "文件上传失败"),
+    HAS_CHILD_MENU_ERROR(514, "存在子菜单，不允许删除"),
     FILE_TYPE_ERROR(507, "文件类型错误，请上传png或jpg文件"),
     LOGIN_ERROR(505, "用户名或密码错误");
 
