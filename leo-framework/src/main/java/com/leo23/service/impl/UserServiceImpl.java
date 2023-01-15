@@ -1,9 +1,12 @@
 package com.leo23.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leo23.domain.ResponseResult;
+import com.leo23.domain.vo.PageVo;
 import com.leo23.domain.vo.UserInfoVo;
+import com.leo23.domain.vo.UserVo;
 import com.leo23.enums.AppHttpCodeEnum;
 import com.leo23.exception.SystemException;
 import com.leo23.mapper.UserMapper;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 用户表(User)表服务实现类
@@ -84,6 +88,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getNickName, nickName);
         return count(wrapper) > 0;
+    }
+
+    @Override
+    public ResponseResult<PageVo> getUserList(Integer pageNum, Integer pageSize, User user) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(StringUtils.hasText(user.getUserName()), User::getUserName, user.getUserName());
+        wrapper.like(StringUtils.hasText(user.getPhonenumber()), User::getPhonenumber, user.getPhonenumber());
+        wrapper.eq(StringUtils.hasText(user.getStatus()), User::getStatus, user.getStatus());
+        // 分页查询
+        Page<User> page = new Page<>(pageNum, pageSize);
+        page(page, wrapper);
+        List<User> users = page.getRecords();
+        List<UserVo> userVos = BeanCopyUtils.copyBeanList(users, UserVo.class);
+        return ResponseResult.okResult(new PageVo(userVos, page.getTotal()));
     }
 }
 
