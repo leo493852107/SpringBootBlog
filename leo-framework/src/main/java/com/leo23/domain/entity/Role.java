@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName("sys_role")
 public class Role {
     //角色ID
     private Long id;
