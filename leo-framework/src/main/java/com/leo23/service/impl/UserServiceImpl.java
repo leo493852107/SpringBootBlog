@@ -5,14 +5,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.dto.UserDto;
+import com.leo23.domain.entity.Role;
 import com.leo23.domain.entity.UserRole;
 import com.leo23.domain.vo.PageVo;
+import com.leo23.domain.vo.UserDetailInfoVo;
 import com.leo23.domain.vo.UserInfoVo;
 import com.leo23.domain.vo.UserVo;
 import com.leo23.enums.AppHttpCodeEnum;
 import com.leo23.exception.SystemException;
 import com.leo23.mapper.UserMapper;
 import com.leo23.domain.entity.User;
+import com.leo23.service.RoleService;
 import com.leo23.service.UserRoleService;
 import com.leo23.service.UserService;
 import com.leo23.utils.BeanCopyUtils;
@@ -23,6 +26,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 用户表(User)表服务实现类
@@ -36,6 +40,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private PasswordEncoder passwordEncoder;
     @Resource
     private UserRoleService userRoleService;
+    @Resource
+    private RoleService roleService;
 
     @Override
     public ResponseResult userInfo() {
@@ -141,6 +147,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public ResponseResult deleteUserById(Long id) {
         removeById(id);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult getUserInfoById(Long id) {
+        // roleIds:用户所关联的角色id列表
+        LambdaQueryWrapper<UserRole> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserRole::getUserId, id);
+        List<UserRole> userRoleList = userRoleService.list(wrapper);
+        List<Long> roleIds = userRoleList.stream().map(UserRole::getRoleId).collect(Collectors.toList());
+        // roles:所有角色的列表
+        List<Role> roles = roleService.list();
+        // user: 用户信息
+        UserVo userVo = BeanCopyUtils.copyBean(getById(id), UserVo.class);
+        UserDetailInfoVo userDetailInfoVo = new UserDetailInfoVo(roleIds, roles, userVo);
+        return ResponseResult.okResult(userDetailInfoVo);
+    }
+
+    @Override
+    public ResponseResult updateUser(UserDto userDto) {
+        // 更新用户信息
+        User user = BeanCopyUtils.copyBean(userDto, User.class);
+        updateById(user);
+        // 更新用户角色Ids
+        userRoleService.saveUserRole(user.getId(), userDto.getRoleIds());
         return ResponseResult.okResult();
     }
 }

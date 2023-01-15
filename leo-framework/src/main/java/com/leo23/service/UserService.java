@@ -26,5 +26,11 @@ public interface UserService extends IService<User> {
     ResponseResult addUser(UserDto userDto);
 
     ResponseResult deleteUserById(Long id);
+
+    // 根据用户 id 查询回显 roleIds:用户所关联的角色id列表, roles:所有角色的列表, user: 用户信息
+    ResponseResult getUserInfoById(Long id);
+
+    // 更新用户信息
+    ResponseResult updateUser(UserDto userDto);
 }
 

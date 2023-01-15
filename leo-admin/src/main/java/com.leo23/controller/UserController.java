@@ -29,4 +29,14 @@ public class UserController {
     public ResponseResult deleteUserById(@PathVariable("id") Long id) {
         return userService.deleteUserById(id);
     }
+
+    @GetMapping("/{id}")
+    public ResponseResult getUserInfoById(@PathVariable("id") Long id) {
+        return userService.getUserInfoById(id);
+    }
+
+    @PutMapping
+    public ResponseResult updateUser(@RequestBody UserDto userDto) {
+        return userService.updateUser(userDto);
+    }
 }
