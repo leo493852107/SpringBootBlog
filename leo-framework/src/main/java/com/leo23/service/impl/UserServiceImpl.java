@@ -20,6 +20,7 @@ import com.leo23.service.UserRoleService;
 import com.leo23.service.UserService;
 import com.leo23.utils.BeanCopyUtils;
 import com.leo23.utils.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
  * @since 2023-01-10 15:57:15
  */
 @Service("userService")
+@Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Resource
     private PasswordEncoder passwordEncoder;
@@ -101,6 +103,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return count(wrapper) > 0;
     }
 
+    private boolean emailExist(String email) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getEmail, email);
+        return count(wrapper) > 0;
+    }
+
+    private boolean phonenumberExist(String phonenumber) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getPhonenumber, phonenumber);
+        return count(wrapper) > 0;
+    }
+
     @Override
     public ResponseResult<PageVo> getUserList(Integer pageNum, Integer pageSize, User user) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
@@ -124,14 +138,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!(StringUtils.hasText(user.getUserName()) && StringUtils.hasText(user.getPhonenumber()) && StringUtils.hasText(user.getEmail()))) {
             return ResponseResult.errorResult(AppHttpCodeEnum.USERNAME_PHONE_EMAIL_NULL);
         }
-        if (count(wrapper.eq(User::getUserName, user.getUserName())) > 0) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.USERNAME_EXIST);
+        if (userNameExist(user.getUserName())) {
+            throw new SystemException(AppHttpCodeEnum.USERNAME_EXIST);
         }
-        if (count(wrapper.eq(User::getPhonenumber, user.getPhonenumber())) > 0) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.PHONENUMBER_EXIST);
+        if (phonenumberExist(user.getPhonenumber())) {
+            throw new SystemException(AppHttpCodeEnum.PHONENUMBER_EXIST);
         }
-        if (count(wrapper.eq(User::getEmail, user.getEmail())) > 0) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.EMAIL_EXIST);
+        if (emailExist(user.getEmail())) {
+            throw new SystemException(AppHttpCodeEnum.EMAIL_EXIST);
         }
         // 密码加密
         String encodePassword = passwordEncoder.encode(user.getPassword());
