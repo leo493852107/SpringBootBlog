@@ -49,4 +49,9 @@ public class RoleController {
     public ResponseResult updateRoleAndRoleMenu(@RequestBody UpdateRoleMenuDto updateRoleMenuDto) {
         return roleService.updateRoleAndRoleMenu(updateRoleMenuDto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseResult deleteRoleById(@PathVariable("id") Long id) {
+        return roleService.deleteRoleById(id);
+    }
 }

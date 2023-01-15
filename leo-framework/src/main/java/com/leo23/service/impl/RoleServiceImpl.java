@@ -88,5 +88,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
         return ResponseResult.okResult();
     }
+
+    @Override
+    public ResponseResult deleteRoleById(Long id) {
+        removeById(id);
+        return ResponseResult.okResult();
+    }
 }
 
