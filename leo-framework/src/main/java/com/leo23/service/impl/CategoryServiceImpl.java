@@ -78,5 +78,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         PageVo pageVo = new PageVo(page.getRecords(), page.getTotal());
         return ResponseResult.okResult(pageVo);
     }
+
+    @Override
+    public ResponseResult addCategory(Category category) {
+        save(category);
+        return ResponseResult.okResult();
+    }
 }
 
