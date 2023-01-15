@@ -26,5 +26,7 @@ public interface CategoryService extends IService<Category> {
     ResponseResult getCategoryById(Long id);
 
     ResponseResult updateCategory(Category category);
+
+    ResponseResult deleteCategoryById(Long id);
 }
 

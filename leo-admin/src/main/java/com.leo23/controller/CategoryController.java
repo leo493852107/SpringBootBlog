@@ -69,5 +69,10 @@ public class CategoryController {
     public ResponseResult updateCategory(@RequestBody Category category) {
         return categoryService.updateCategory(category);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseResult deleteCategoryById(@PathVariable("id") Long id) {
+        return categoryService.deleteCategoryById(id);
+    }
 }
 
