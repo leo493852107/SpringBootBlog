@@ -32,8 +32,8 @@ public class CategoryController {
     }
 
     @GetMapping("/list")
-    public ResponseResult categoryList(Integer pageNum, Integer pageSize) {
-        return categoryService.categoryList(pageNum, pageSize);
+    public ResponseResult categoryList(Integer pageNum, Integer pageSize, Category category) {
+        return categoryService.categoryList(pageNum, pageSize, category);
     }
 
     @PreAuthorize("@ps.hasPermission('content:category:export')")

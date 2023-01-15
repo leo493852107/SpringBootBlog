@@ -19,6 +19,6 @@ public interface CategoryService extends IService<Category> {
 
     List<CategoryVo> listAllCategory();
 
-    ResponseResult categoryList(Integer pageNum, Integer pageSize);
+    ResponseResult categoryList(Integer pageNum, Integer pageSize, Category category);
 }
 

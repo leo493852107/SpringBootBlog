@@ -14,6 +14,7 @@ import com.leo23.service.ArticleService;
 import com.leo23.service.CategoryService;
 import com.leo23.utils.BeanCopyUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -64,9 +65,14 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     @Override
-    public ResponseResult categoryList(Integer pageNum, Integer pageSize) {
+    public ResponseResult categoryList(Integer pageNum, Integer pageSize, Category category) {
         LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Category::getStatus, SystemConstants.NORMAL);
+        wrapper.like(StringUtils.hasText(category.getName()), Category::getName, category.getName());
+        if (StringUtils.hasText(category.getStatus())) {
+            wrapper.eq(Category::getStatus, category.getStatus());
+        } else {
+            wrapper.eq(Category::getStatus, SystemConstants.NORMAL);
+        }
         Page<Category> page = new Page<>(pageNum, pageSize);
         page(page, wrapper);
         PageVo pageVo = new PageVo(page.getRecords(), page.getTotal());
