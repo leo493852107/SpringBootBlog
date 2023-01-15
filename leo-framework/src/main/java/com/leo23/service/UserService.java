@@ -24,5 +24,7 @@ public interface UserService extends IService<User> {
 
     // 新增用户
     ResponseResult addUser(UserDto userDto);
+
+    ResponseResult deleteUserById(Long id);
 }
 

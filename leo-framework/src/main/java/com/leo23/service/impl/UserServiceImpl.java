@@ -137,5 +137,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         return ResponseResult.okResult();
     }
+
+    @Override
+    public ResponseResult deleteUserById(Long id) {
+        removeById(id);
+        return ResponseResult.okResult();
+    }
 }
 
