@@ -3,6 +3,7 @@ package com.leo23.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.entity.Menu;
+import com.leo23.domain.vo.RoutersVo;
 
 import java.util.List;
 
@@ -25,5 +26,8 @@ public interface MenuService extends IService<Menu> {
 
     // 有子菜单不允许删除
     ResponseResult deleteMenuById(Long id);
+
+    // 获取所有未删除 menu信息
+    ResponseResult treeSelect();
 }
 

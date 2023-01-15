@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leo23.constants.SystemConstants;
 import com.leo23.domain.ResponseResult;
+import com.leo23.domain.vo.MenuVo;
 import com.leo23.enums.AppHttpCodeEnum;
 import com.leo23.mapper.MenuMapper;
 import com.leo23.domain.entity.Menu;
@@ -100,6 +101,30 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         }
         baseMapper.deleteById(id);
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult treeSelect() {
+        List<MenuVo> menuVos = baseMapper.selectTreeSelectMenuVo();
+        // 构建tree
+        List<MenuVo> menuTree = buildMenuVoTree(menuVos);
+        return ResponseResult.okResult(menuTree);
+    }
+
+    private List<MenuVo> buildMenuVoTree(List<MenuVo> menuVos) {
+        List<MenuVo> menuVos1 = menuVos.stream()
+                .filter(menuVo -> menuVo.getParentId().equals(0L)) // 获得parentId为0的顶级菜单
+                .map(menuVo -> menuVo.setChildren(getMenuVoChildren(menuVo, menuVos)))
+                .collect(Collectors.toList());
+        return menuVos1;
+    }
+
+    private List<MenuVo> getMenuVoChildren(MenuVo menuVo, List<MenuVo> menuVos) {
+        List<MenuVo> childrenList = menuVos.stream()
+                .filter(m -> m.getParentId().equals(menuVo.getId()))
+                .map(m -> m.setChildren(getMenuVoChildren(m, menuVos)))
+                .collect(Collectors.toList());
+        return childrenList;
     }
 }
 

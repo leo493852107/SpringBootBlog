@@ -2,6 +2,7 @@ package com.leo23.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.leo23.domain.entity.Menu;
+import com.leo23.domain.vo.MenuVo;
 
 import java.util.List;
 
@@ -19,5 +20,7 @@ public interface MenuMapper extends BaseMapper<Menu> {
     List<Menu> selectAllRouterMenu();
 
     List<Menu> selectRouterMenuTreeByUserId(Long userId);
+
+    List<MenuVo> selectTreeSelectMenuVo();
 }
 

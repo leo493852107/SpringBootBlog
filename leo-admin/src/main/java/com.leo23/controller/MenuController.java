@@ -45,4 +45,8 @@ public class MenuController {
         return menuService.deleteMenuById(id);
     }
 
+    @GetMapping("/treeselect")
+    public ResponseResult treeSelect() {
+        return menuService.treeSelect();
+    }
 }

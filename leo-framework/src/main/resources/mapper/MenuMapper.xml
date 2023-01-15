@@ -56,4 +56,24 @@
           AND m.del_flag = 0
         ORDER BY m.parent_id, m.order_num;
     </select>
+
+    <select id="selectTreeSelectMenuVo" resultType="com.leo23.domain.vo.MenuVo">
+        SELECT DISTINCT m.id,
+                        m.parent_id,
+                        m.menu_name as label,
+                        m.path,
+                        m.component,
+                        m.visible,
+                        m.STATUS,
+                        IFNULL(m.perms, '') as perms,
+                        m.is_frame,
+                        m.menu_type,
+                        m.icon,
+                        m.order_num,
+                        m.create_time
+        FROM sys_menu m
+        WHERE m.STATUS = 0
+          AND m.del_flag = 0
+        ORDER BY m.parent_id, m.order_num;
+    </select>
 </mapper>
