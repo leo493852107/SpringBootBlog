@@ -5,18 +5,23 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.dto.RoleDto;
+import com.leo23.domain.dto.UpdateRoleMenuDto;
+import com.leo23.domain.entity.RoleMenu;
 import com.leo23.domain.vo.PageVo;
 import com.leo23.domain.vo.RoleVo;
 import com.leo23.mapper.RoleMapper;
 import com.leo23.domain.entity.Role;
+import com.leo23.service.RoleMenuService;
 import com.leo23.service.RoleService;
 import com.leo23.utils.BeanCopyUtils;
 import com.leo23.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 角色信息表(Role)表服务实现类
@@ -26,6 +31,9 @@ import java.util.List;
  */
 @Service("roleService")
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
+
+    @Resource
+    private RoleMenuService roleMenuService;
 
     @Override
     public List<String> selectRoleKeyByUserId(Long id) {
@@ -57,6 +65,27 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         role.setId(roleDto.getRoleId());
         role.setStatus(roleDto.getStatus());
         baseMapper.updateById(role);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult getRoleById(Long id) {
+        RoleVo roleVo = BeanCopyUtils.copyBean(getById(id), RoleVo.class);
+        return ResponseResult.okResult(roleVo);
+    }
+
+    @Override
+    public ResponseResult updateRoleAndRoleMenu(UpdateRoleMenuDto updateRoleMenuDto) {
+        // 更新角色role 信息
+        Role role = BeanCopyUtils.copyBean(updateRoleMenuDto, Role.class);
+        updateById(role);
+        // 更新role_menu信息，先删除包含role_id数据，再增加
+        LambdaQueryWrapper<RoleMenu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(RoleMenu::getRoleId, updateRoleMenuDto.getId());
+        roleMenuService.remove(wrapper);
+        for (String menuId : updateRoleMenuDto.getMenuIds()) {
+            roleMenuService.save(new RoleMenu(updateRoleMenuDto.getId(), Long.parseLong(menuId)));
+        }
         return ResponseResult.okResult();
     }
 }

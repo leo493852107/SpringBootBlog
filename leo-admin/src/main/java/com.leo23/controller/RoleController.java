@@ -3,8 +3,8 @@ package com.leo23.controller;
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.dto.RoleDto;
 import com.leo23.domain.dto.RoleMenuDto;
+import com.leo23.domain.dto.UpdateRoleMenuDto;
 import com.leo23.domain.entity.Role;
-import com.leo23.domain.entity.RoleMenu;
 import com.leo23.domain.vo.PageVo;
 import com.leo23.service.RoleMenuService;
 import com.leo23.service.RoleService;
@@ -38,5 +38,15 @@ public class RoleController {
         // 1对都关联 role & menu
         roleMenuService.saveRoleMenu(role.getId(), roleMenuDto.getMenuIds());
         return ResponseResult.okResult();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseResult getRoleById(@PathVariable("id") Long id) {
+        return roleService.getRoleById(id);
+    }
+
+    @PutMapping
+    public ResponseResult updateRoleAndRoleMenu(@RequestBody UpdateRoleMenuDto updateRoleMenuDto) {
+        return roleService.updateRoleAndRoleMenu(updateRoleMenuDto);
     }
 }

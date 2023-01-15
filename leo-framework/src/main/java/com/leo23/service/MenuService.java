@@ -29,5 +29,8 @@ public interface MenuService extends IService<Menu> {
 
     // 获取所有未删除 menu信息
     ResponseResult treeSelect();
+
+    // 加载对应角色菜单列表树接口
+    ResponseResult roleMenuTreeselect(Long id);
 }
 

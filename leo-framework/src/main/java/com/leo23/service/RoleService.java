@@ -3,6 +3,7 @@ package com.leo23.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.leo23.domain.ResponseResult;
 import com.leo23.domain.dto.RoleDto;
+import com.leo23.domain.dto.UpdateRoleMenuDto;
 import com.leo23.domain.entity.Role;
 import com.leo23.domain.vo.PageVo;
 
@@ -21,5 +22,11 @@ public interface RoleService extends IService<Role> {
     ResponseResult<PageVo> getRoleList(Integer pageNum, Integer pageSize, Role role);
 
     ResponseResult updateRoleStatus(RoleDto roleDto);
+
+    // 角色信息回显
+    ResponseResult getRoleById(Long id);
+
+    // 更新角色信息
+    ResponseResult updateRoleAndRoleMenu(UpdateRoleMenuDto updateRoleMenuDto);
 }
 

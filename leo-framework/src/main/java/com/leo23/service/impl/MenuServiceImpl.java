@@ -4,15 +4,19 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leo23.constants.SystemConstants;
 import com.leo23.domain.ResponseResult;
+import com.leo23.domain.entity.RoleMenu;
 import com.leo23.domain.vo.MenuVo;
+import com.leo23.domain.vo.RoleMenuVo;
 import com.leo23.enums.AppHttpCodeEnum;
 import com.leo23.mapper.MenuMapper;
 import com.leo23.domain.entity.Menu;
 import com.leo23.service.MenuService;
+import com.leo23.service.RoleMenuService;
 import com.leo23.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +28,8 @@ import java.util.stream.Collectors;
  */
 @Service("menuService")
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
+    @Resource
+    private RoleMenuService roleMenuService;
 
     @Override
     public List<String> selectPermsByUserId(Long id) {
@@ -125,6 +131,20 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 .map(m -> m.setChildren(getMenuVoChildren(m, menuVos)))
                 .collect(Collectors.toList());
         return childrenList;
+    }
+
+    @Override
+    public ResponseResult roleMenuTreeselect(Long id) {
+        // menus 菜单树
+        List<MenuVo> menuVos = baseMapper.selectTreeSelectMenuVo();
+        // 构建tree
+        List<MenuVo> menuTree = buildMenuVoTree(menuVos);
+        // checkedKeys 角色所关联的菜单权限id列表
+        LambdaQueryWrapper<RoleMenu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(RoleMenu::getRoleId, id);
+        List<RoleMenu> roleMenus = roleMenuService.list(wrapper);
+        List<Long> menuIds = roleMenus.stream().map(RoleMenu::getMenuId).collect(Collectors.toList());
+        return ResponseResult.okResult(new RoleMenuVo(menuTree, menuIds));
     }
 }
 
