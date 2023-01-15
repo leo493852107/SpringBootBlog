@@ -22,5 +22,9 @@ public interface CategoryService extends IService<Category> {
     ResponseResult categoryList(Integer pageNum, Integer pageSize, Category category);
 
     ResponseResult addCategory(Category category);
+
+    ResponseResult getCategoryById(Long id);
+
+    ResponseResult updateCategory(Category category);
 }
 

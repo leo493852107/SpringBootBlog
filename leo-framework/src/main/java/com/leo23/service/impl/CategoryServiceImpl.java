@@ -84,5 +84,17 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         save(category);
         return ResponseResult.okResult();
     }
+
+    @Override
+    public ResponseResult getCategoryById(Long id) {
+        Category category = getById(id);
+        return ResponseResult.okResult(category);
+    }
+
+    @Override
+    public ResponseResult updateCategory(Category category) {
+        updateById(category);
+        return ResponseResult.okResult();
+    }
 }
 
