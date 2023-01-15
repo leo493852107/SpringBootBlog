@@ -30,5 +30,8 @@ public interface RoleService extends IService<Role> {
     ResponseResult updateRoleAndRoleMenu(UpdateRoleMenuDto updateRoleMenuDto);
 
     ResponseResult deleteRoleById(Long id);
+
+    // 获取状态正常的所有角色
+    ResponseResult listAllRole();
 }
 

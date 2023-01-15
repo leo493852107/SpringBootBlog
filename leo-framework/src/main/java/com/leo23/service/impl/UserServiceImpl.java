@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leo23.domain.ResponseResult;
+import com.leo23.domain.dto.UserDto;
+import com.leo23.domain.entity.UserRole;
 import com.leo23.domain.vo.PageVo;
 import com.leo23.domain.vo.UserInfoVo;
 import com.leo23.domain.vo.UserVo;
@@ -11,6 +13,7 @@ import com.leo23.enums.AppHttpCodeEnum;
 import com.leo23.exception.SystemException;
 import com.leo23.mapper.UserMapper;
 import com.leo23.domain.entity.User;
+import com.leo23.service.UserRoleService;
 import com.leo23.service.UserService;
 import com.leo23.utils.BeanCopyUtils;
 import com.leo23.utils.SecurityUtils;
@@ -31,6 +34,8 @@ import java.util.List;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Resource
     private PasswordEncoder passwordEncoder;
+    @Resource
+    private UserRoleService userRoleService;
 
     @Override
     public ResponseResult userInfo() {
@@ -102,6 +107,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         List<User> users = page.getRecords();
         List<UserVo> userVos = BeanCopyUtils.copyBeanList(users, UserVo.class);
         return ResponseResult.okResult(new PageVo(userVos, page.getTotal()));
+    }
+
+    @Override
+    public ResponseResult addUser(UserDto userDto) {
+        // 保存用户信息到user表
+        User user = BeanCopyUtils.copyBean(userDto, User.class);
+        // 判断 用户名/手机号/邮箱 不能为空，是否存在
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        if (!(StringUtils.hasText(user.getUserName()) && StringUtils.hasText(user.getPhonenumber()) && StringUtils.hasText(user.getEmail()))) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.USERNAME_PHONE_EMAIL_NULL);
+        }
+        if (count(wrapper.eq(User::getUserName, user.getUserName())) > 0) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.USERNAME_EXIST);
+        }
+        if (count(wrapper.eq(User::getPhonenumber, user.getPhonenumber())) > 0) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PHONENUMBER_EXIST);
+        }
+        if (count(wrapper.eq(User::getEmail, user.getEmail())) > 0) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.EMAIL_EXIST);
+        }
+        // 密码加密
+        String encodePassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodePassword);
+        save(user);
+        // 保存用户的角色信息到user_role表
+        for (String roleId : userDto.getRoleIds()) {
+            userRoleService.save(new UserRole(user.getId(), Long.parseLong(roleId)));
+        }
+        return ResponseResult.okResult();
     }
 }
 

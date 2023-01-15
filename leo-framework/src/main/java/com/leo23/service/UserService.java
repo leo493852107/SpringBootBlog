@@ -2,6 +2,7 @@ package com.leo23.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.leo23.domain.ResponseResult;
+import com.leo23.domain.dto.UserDto;
 import com.leo23.domain.entity.User;
 import com.leo23.domain.vo.PageVo;
 
@@ -20,5 +21,8 @@ public interface UserService extends IService<User> {
     ResponseResult register(User user);
 
     ResponseResult<PageVo> getUserList(Integer pageNum, Integer pageSize, User user);
+
+    // 新增用户
+    ResponseResult addUser(UserDto userDto);
 }
 
