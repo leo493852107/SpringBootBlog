@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leo23.domain.ResponseResult;
+import com.leo23.domain.dto.RoleDto;
 import com.leo23.domain.vo.PageVo;
+import com.leo23.domain.vo.RoleVo;
 import com.leo23.mapper.RoleMapper;
 import com.leo23.domain.entity.Role;
 import com.leo23.service.RoleService;
+import com.leo23.utils.BeanCopyUtils;
 import com.leo23.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -43,8 +46,18 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         wrapper.eq(StringUtils.hasText(role.getStatus()), Role::getStatus, role.getStatus());
         Page<Role> page = new Page<>(pageNum, pageSize);
         page(page, wrapper);
-        PageVo pageVo = new PageVo(page.getRecords(), page.getTotal());
+        List<RoleVo> roleVos = BeanCopyUtils.copyBeanList(page.getRecords(), RoleVo.class);
+        PageVo pageVo = new PageVo(roleVos, page.getTotal());
         return ResponseResult.okResult(pageVo);
+    }
+
+    @Override
+    public ResponseResult updateRoleStatus(RoleDto roleDto) {
+        Role role = new Role();
+        role.setId(roleDto.getRoleId());
+        role.setStatus(roleDto.getStatus());
+        baseMapper.updateById(role);
+        return ResponseResult.okResult();
     }
 }
 
